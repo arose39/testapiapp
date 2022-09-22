@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,8 +17,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
+Route::prefix('adminpannel')->middleware(['admin'])->group(function () {
+    Route::get('/', [AdminController::class, 'showPannel'])->middleware(['admin'])->name('adminpannel');
+    Route::resource('users', UserController::class)->except(['show'])->middleware(['admin']);
+});
