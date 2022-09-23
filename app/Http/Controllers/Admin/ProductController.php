@@ -3,19 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\ProductLocalizationRepositoryInterface;
-use App\Repositories\ProductRepositoryInterface;
+use App\Models\Product;
+use App\Models\ProductLocalization;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function __construct(
-        private ProductRepositoryInterface $productRepository,
-        private ProductLocalizationRepositoryInterface $productLocalizationRepository
-    )
-    {
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +17,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = $this->productRepository->all();
+        $products = Product::orderBy('name')->get();
+
         return view('admin/products/index', ['products' => $products]);
     }
 
@@ -32,9 +27,8 @@ class ProductController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function show(string $productId)
+    public function show(Product $product)
     {
-        $product = $this->productRepository->getById($productId);
         return view('admin/products/show', ['product' => $product]);
     }
 
@@ -56,15 +50,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $product = $this->productRepository->create($request->name, $request->price);
+        $product = new Product();
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->save();
+
         $localizations = $request->get('localizations');
         foreach ($localizations as $localization => $data) {
-            $this->productLocalizationRepository->create(
-                $product->id,
-                $localization,
-                $data['name'],
-                $data['description']
-            );
+            $productLocalization = new ProductLocalization();
+            $productLocalization->product_id = $product->id;
+            $productLocalization->locale = $localization;
+            $productLocalization->name = $data['name'];
+            $productLocalization->description = $data['description'];
+            $productLocalization->save();
         }
 
         if ($product) {
@@ -78,13 +76,9 @@ class ProductController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\View\View
      */
-    public function edit(string $productId)
+    public function edit(Product $product)
     {
-        $product = $this->productRepository->getById($productId);
-
-        return view('admin/products/edit', [
-            'product' => $product,
-        ]);
+        return view('admin/products/edit', ['product' => $product]);
     }
 
     /**
@@ -94,21 +88,21 @@ class ProductController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, int $productId)
+    public function update(Request $request, Product $product)
     {
-        $updatedProduct = $this->productRepository->update($productId, $request->name, $request->price);
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->save();
         $localizations = $request->get('localizations');
         foreach ($localizations as $localization => $data) {
-            $this->productLocalizationRepository->update(
-                $updatedProduct->id,
-                $localization,
-                $data['name'],
-                $data['description']
-            );
+            $updatedProductLocalization = ProductLocalization::where(['product_id' => $product->id], ['locale' => $localization])->first();
+            $updatedProductLocalization->name = $request->name;
+            $updatedProductLocalization->description = $request->description;
+            $updatedProductLocalization->save();
         }
-        if ($updatedProduct) {
-            return redirect()->route('products.index')->withSuccess("product $updatedProduct->name was updates");
-        }
+
+        return redirect()->route('products.index')->withSuccess("product $product->name was updates");
+
     }
 
     /**
@@ -117,9 +111,9 @@ class ProductController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $productId)
+    public function destroy(Product $product)
     {
-        if ($this->productRepository->delete($productId)) {
+        if ($product->delete()) {
             return redirect()->route('products.index')->withSuccess("Product was deleted");
         }
     }

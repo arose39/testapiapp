@@ -6,17 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
-use App\Repositories\UserRepositoryInterface;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    private UserRepositoryInterface $userRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +17,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->userRepository->all();
+        $users = User::orderBy('name')->get();
+
         return view('admin/users/index', ['users' => $users]);
     }
 
@@ -46,7 +40,12 @@ class UserController extends Controller
      */
     public function store(UserCreateRequest $request)
     {
-        $user = $this->userRepository->create($request->name, $request->email, $request->password);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
         if ($user) {
             return redirect()->back()->withSuccess("User $user->name was successfully added");
         }
@@ -58,9 +57,8 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\View\View
      */
-    public function edit(string $userId)
+    public function edit(User $user)
     {
-        $user = $this->userRepository->getById($userId);
         return view('admin/users/edit', ['user' => $user]);
     }
 
@@ -71,11 +69,16 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(UserUpdateRequest $request, string $userId)
+    public function update(UserUpdateRequest $request, User $user)
     {
-        $updatedUser = $this->userRepository->update($userId, $request->name, $request->email, $request->password);
-        if ($updatedUser) {
-            return redirect()->route('users.index')->withSuccess("User $updatedUser->name was updates");
+        $user->name = $request->name;
+        $user->email = $request->email;
+        if (!$request->password == '') {
+            $user->password = Hash::make($request->password);
+        }
+
+        if ($user->save()) {
+            return redirect()->route('users.index')->withSuccess("User $user->name was updates");
         }
     }
 
@@ -85,9 +88,9 @@ class UserController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $userId)
+    public function destroy(User $user)
     {
-        if ($this->userRepository->delete($userId)) {
+        if ($user->delete()) {
             return redirect()->route('users.index')->withSuccess("User was deleted");
         }
     }
