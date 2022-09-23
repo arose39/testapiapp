@@ -1,5 +1,5 @@
 @extends('layouts/admin_layout')
-@section('title', 'Создание нового пользователя')
+@section('title', 'Creating new order')
 @section('main_content')
     @if(session('success'))
         <div class="alert alert-danger">
@@ -15,20 +15,27 @@
             </ul>
         </div>
     @endif
-<form action="{{route('users.store')}}" method="post">
+<form action="{{route('orders.store')}}" method="post">
     @csrf
     <div class="card-body">
         <div class="form-group">
-            <label for="exampleInputEmail1">Name</label>
-            <input name="name" type="string" class="form-control" id="exampleInputEmail1" placeholder="Enter name">
+            <label for="user">User</label>
+            <select name="user_id" class="custom-select mr-sm-2" name="group" id="user">
+                <option value="" selected>Not assigned</option>
+                @foreach($users as $user)
+                    <option value="{{$user->id}}">id:{{$user->id}}  name:{{$user->name}}</option>
+                @endforeach
+            </select>
         </div>
+
         <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input name="email" type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-        </div>
-        <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input name="password" type="string" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            <label for="product">Product</label>
+            <select name="product_id" class="custom-select mr-sm-2" name="product" id="group">
+                <option value="" selected>Not assigned</option>
+                @foreach($products as $product)
+                    <option value="{{$product->id}}">id:{{$product->id}}  {{$product->name}}  price:{{$product->price}}</option>
+                @endforeach
+            </select>
         </div>
 
     </div>

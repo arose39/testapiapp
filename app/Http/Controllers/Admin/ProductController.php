@@ -52,7 +52,7 @@ class ProductController extends Controller
     {
         $product = new Product();
         $product->name = $request->name;
-        $product->price = $request->price;
+        $product->price = (float) $request->price;
         $product->save();
 
         $localizations = $request->get('localizations');
@@ -91,7 +91,7 @@ class ProductController extends Controller
     public function update(Request $request, Product $product)
     {
         $product->name = $request->name;
-        $product->price = $request->price;
+        $product->price = (float) $request->price;
         $product->save();
         $localizations = $request->get('localizations');
         foreach ($localizations as $localization => $data) {

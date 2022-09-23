@@ -46,8 +46,8 @@ class OrderSeeder extends Seeder
             $ordersList[] = [
                 'user_id' => $this->faker->numberBetween(1, $this->numberOfUsers),
                 'product_id' => $this->faker->numberBetween(1, $this->numberOfProducts),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => now()->addSecond($i),
+                'updated_at' => now()->addSecond($i),
             ];
         }
 
