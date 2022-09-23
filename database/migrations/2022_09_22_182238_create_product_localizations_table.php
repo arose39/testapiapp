@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('product_localizations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->nullable()->constrained();
+            $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->string('locale');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

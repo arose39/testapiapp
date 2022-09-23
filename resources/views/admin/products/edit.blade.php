@@ -1,5 +1,5 @@
 @extends('layouts/admin_layout')
-@section('title', 'Редактирование данных пользователя')
+@section('title', 'Создание нового пользователя')
 @section('main_content')
     @if(session('success'))
         <div class="alert alert-danger">
@@ -15,27 +15,38 @@
             </ul>
         </div>
     @endif
-    <form action="{{route('users.update', $user->id)}}" method="post">
+    <form action="{{route('products.update', $product->id)}}" method="post">
         @csrf
-        @method('put')
+        @method('patch')
         <div class="card-body">
             <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
-                <input name="name" type="string" value="{{$user->name}}" class="form-control"
-                       id="exampleInputEmail1" placeholder="Enter name">
+                <label for="name"> Private Name</label>
+                <input name="name" type="string" class="form-control" id="name" value="{{$product->name}}" >
+                <label for="price"> Price</label>
+                <input name="price" type="string" class="form-control" id="price" value="{{$product->price}}">
             </div>
-            <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
-                <input name="email" type="email" value="{{$user->email}}" class="form-control"
-                       id="exampleInputEmail1" placeholder="Enter email">
+            <label for="ua_localization"> <h3>Ukrainian localization</h3> </label>
+            <div class="form-group" id="ua_localization">
+                <label for="ua_name">Enter product name on ukrainian </label>
+                <input name="localizations[ua][name]" type="string" class="form-control" id="ua_name"
+                       value="{{$product->localizations->where('locale' , 'ua')->first()->name}}">
+                <label for="ua_description">Enter product description on ukrainian</label>
+                <input name="localizations[ua][description]" type="text" class="form-control" id="ua_description"
+                       value="{{$product->localizations->where('locale' , 'ua')->first()->description}}">
             </div>
-            <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input name="password" type="string" value="" class="form-control"
-                       id="exampleInputPassword1" placeholder="Оставьте поле пустым, если не хотите менять пароль">
+            <label for="en_localization"> <h3>English localization</h3> </label>
+            <div class="form-group" id="en_localization">
+                <label for="en_name">Enter product name on english </label>
+                <input name="localizations[en][name]" type="string" class="form-control" id="en_name"
+                       value="{{$product->localizations->where('locale' , 'en')->first()->name}}">
+                <label for="en_description">Enter product description on english</label>
+                <input name="localizations[en][description]" type="text" class="form-control" id="en_description"
+                       value="{{$product->localizations->where('locale' , 'en')->first()->description}}">
             </div>
+
         </div>
         <!-- /.card-body -->
+
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>

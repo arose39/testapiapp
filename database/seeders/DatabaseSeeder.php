@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         \App\Models\User::factory(20)->create();
+         \App\Models\User::factory(40)->create();
 
          \App\Models\User::factory()->create([
              'name' => 'Admin User',
@@ -25,8 +25,11 @@ class DatabaseSeeder extends Seeder
              'remember_token' => Str::random(10),
          ]);
 
-//        $this->call([
-//            OrderSeeder::class,
-//        ]);
+        \App\Models\Product::factory(20)->create();
+
+        $this->call([
+            OrderSeeder::class,
+            ProductLocalizationSeeder::class
+        ]);
     }
 }

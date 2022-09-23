@@ -14,15 +14,17 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getById(string $productId): Product
     {
-        return Product::find($userId);
+        return Product::find($productId);
     }
 
-    public function create(string $name, int $price): Product
+    public function create(string $name, string $price): Product
     {
-        return Product::create([
-            'name' => $name,
-            'price' => $price,
-        ]);
+        $product = new Product();
+        $product->name = $name;
+        $product->price =  $price;
+        if ($product->save()){
+            return $product;
+        }
     }
 
     public function update(string $productId, string $name, string $price): Product

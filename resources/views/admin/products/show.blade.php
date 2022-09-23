@@ -1,14 +1,6 @@
 @extends('layouts/admin_layout')
-@section('title', 'Все зарегистрированные пользователи')
+@section('title', 'Product')
 @section('main_content')
-    @if(session('success'))
-        <div class="alert alert-danger">
-            <h1>{{session('success')}}</h1>
-        </div>
-    @endif
-    <a class="btn btn-block btn-info btn-lg" href="{{route('products.create')}}">
-        Add new product
-    </a>
     <section class="content">
         <!-- Default box -->
         <div class="card">
@@ -37,6 +29,9 @@
                         <th>
                             Price
                         </th>
+                        <th style="width: 30%">
+                            description
+                        </th>
                         <th>
                             created_at
                         </th>
@@ -48,19 +43,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach($products as $product)
+
                         <tr>
                             <td>{{$product->id}}</td>
                             <td>{{$product->name}}</td>
                             <td>{{$product->price}}</td>
+                            <td>{{$product->localizations()->first()->description}}</td>
                             <td>{{$product->created_at}}</td>
                             <td>{{$product->updated_at}}</td>
                             <td class="project-actions text-right">
-                                <a class="btn btn-info btn-sm" href="{{route('products.show', $product->id)}}">
-                                    <i class="fas fa-pencil-alt">
-                                    </i>
-                                    Show
-                                </a>
                                 <a class="btn btn-info btn-sm" href="{{route('products.edit', $product->id)}}">
                                     <i class="fas fa-pencil-alt">
                                     </i>
@@ -76,7 +67,7 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+
                     </tbody>
                 </table>
             </div>

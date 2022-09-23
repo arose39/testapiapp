@@ -78,6 +78,18 @@
                                     <p>Список зарегистрированных пользователей</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{route('products.index')}}" class="nav-link">
+                                    <i class="far  nav-icon"></i>
+                                    <p>Список продуктов</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{route('orders.index')}}" class="nav-link">
+                                    <i class="far  nav-icon"></i>
+                                    <p>Список заказов</p>
+                                </a>
+                            </li>
                         </ul>
             </nav>
             <!-- /.sidebar-menu -->

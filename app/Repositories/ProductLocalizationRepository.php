@@ -12,31 +12,25 @@ class ProductLocalizationRepository implements ProductLocalizationRepositoryInte
         return ProductLocalization::orderBy('name')->get();
     }
 
-    public function getEnByProductId(string $productId): ProductLocalization
-    {
-        return ProductLocalization::findBy(['product_id'=>$productId, 'locale'=>'en']);
-    }
-
-    public function getUaByProductId(string $productId): ProductLocalization
-    {
-        return ProductLocalization::findBy(['product_id'=>$productId, 'locale'=>'ua']);
-    }
-
     public function create(string $productId, string $locale, string $name, string $description): ProductLocalization
     {
-        return ProductLocalization::create([
-            'product_id' => $productId,
-            'locale' => $locale,
-            'name' => $name,
-            'description' => $description,
-        ]);
+        $productLocalization = new ProductLocalization();
+        $productLocalization->product_id = $productId;
+        $productLocalization->locale = $locale;
+        $productLocalization->name = $name;
+        $productLocalization->description = $description;
+
+        if ($productLocalization->save()) {
+            return $productLocalization;
+        }
     }
 
-    public function update(string $productLocalizationId,  string $name, string $description): ProductLocalization
+    public function update(string $productId, string $locale, string $name, string $description): ProductLocalization
     {
-        $updatedProductLocalization = ProductLocalization::find($productLocalizationId);
+        $updatedProductLocalization = ProductLocalization::where(['product_id' => $productId], ['locale' => $locale])->first();
         $updatedProductLocalization->name = $name;
         $updatedProductLocalization->description = $description;
+
         if ($updatedProductLocalization->save()) {
             return $updatedProductLocalization;
         }

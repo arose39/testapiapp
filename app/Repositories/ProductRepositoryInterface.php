@@ -11,7 +11,7 @@ interface ProductRepositoryInterface
 
     public function getById(string $productId): Product;
 
-    public function create(string $name, int $price): Product;
+    public function create(string $name, string $price): Product;
 
     public function update(string $productId, string $name, string $price): Product;
 

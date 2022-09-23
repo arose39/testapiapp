@@ -24,7 +24,18 @@ class ProductController extends Controller
     public function index()
     {
         $products = $this->productRepository->all();
-        return view('admin/product/index', ['products' => $products]);
+        return view('admin/products/index', ['products' => $products]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function show(string $productId)
+    {
+        $product = $this->productRepository->getById($productId);
+        return view('admin/products/show', ['product' => $product]);
     }
 
     /**
@@ -46,18 +57,15 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $product = $this->productRepository->create($request->name, $request->price);
-        $productLocalizationEn = $this->productLocalizationRepository->create(
-            $product->id,
-            "en",
-            $request->en_name,
-            $request->en_description,
-        );
-        $productLocalizationUa = $this->productLocalizationRepository->create(
-            $product->id,
-            "ua",
-            $request->ua_name,
-            $request->ua_description,
-        );
+        $localizations = $request->get('localizations');
+        foreach ($localizations as $localization => $data) {
+            $this->productLocalizationRepository->create(
+                $product->id,
+                $localization,
+                $data['name'],
+                $data['description']
+            );
+        }
 
         if ($product) {
             return redirect()->back()->withSuccess("Product $product->name was successfully added");
@@ -73,12 +81,9 @@ class ProductController extends Controller
     public function edit(string $productId)
     {
         $product = $this->productRepository->getById($productId);
-        $productLocalizationEn = $this->productLocalizationRepository->getEnByProductId($productId);
-        $productLocalizationUa = $this->productLocalizationRepository->getUaByProductId($productId);
+
         return view('admin/products/edit', [
             'product' => $product,
-            'productLocalizationEn' => $productLocalizationEn,
-            'productLocalizationUa' => $productLocalizationUa,
         ]);
     }
 
@@ -89,19 +94,18 @@ class ProductController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $productId)
+    public function update(Request $request, int $productId)
     {
         $updatedProduct = $this->productRepository->update($productId, $request->name, $request->price);
-        $this->productLocalizationRepository->update(
-            $request->en_localization_id,
-            $request->en_localization_name,
-            $request->en_localization_description,
-        );
-        $this->productLocalizationRepository->update(
-            $request->ua_localization_id,
-            $request->ua_localization_name,
-            $request->ua_localization_description,
-        );
+        $localizations = $request->get('localizations');
+        foreach ($localizations as $localization => $data) {
+            $this->productLocalizationRepository->update(
+                $updatedProduct->id,
+                $localization,
+                $data['name'],
+                $data['description']
+            );
+        }
         if ($updatedProduct) {
             return redirect()->route('products.index')->withSuccess("product $updatedProduct->name was updates");
         }
@@ -115,7 +119,7 @@ class ProductController extends Controller
      */
     public function destroy(string $productId)
     {
-        if ($this->productRepository->delete($productId) && $this->productLocalizationRepository->deleteByProductId($productId)) {
+        if ($this->productRepository->delete($productId)) {
             return redirect()->route('products.index')->withSuccess("Product was deleted");
         }
     }
