@@ -4,10 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules;
 
-class UserUpdateRequest extends FormRequest
+class OrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -16,7 +14,7 @@ class UserUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return Auth::user()->is_admin;
+        return Auth::user() !== null;
     }
 
     /**
@@ -27,9 +25,8 @@ class UserUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['nullable', Rules\Password::defaults()]
+            'user_id' => ['required', 'numeric'],
+            'product_id' => ['required', 'numeric'],
         ];
     }
 }

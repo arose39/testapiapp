@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Admin\Product\CreateProductGroupAction;
+use App\Actions\Admin\Product\UpdateProductGroupAction;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductWithLocalizationRequest;
 use App\Models\Product;
-use App\Models\ProductLocalization;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -48,26 +48,12 @@ class ProductController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductWithLocalizationRequest $request, CreateProductGroupAction $action)
     {
-        $product = new Product();
-        $product->name = $request->name;
-        $product->price = (float) $request->price;
-        $product->save();
+        $productWithLocalizationsData = $request->validated();
+        $product = $action($productWithLocalizationsData);
 
-        $localizations = $request->get('localizations');
-        foreach ($localizations as $localization => $data) {
-            $productLocalization = new ProductLocalization();
-            $productLocalization->product_id = $product->id;
-            $productLocalization->locale = $localization;
-            $productLocalization->name = $data['name'];
-            $productLocalization->description = $data['description'];
-            $productLocalization->save();
-        }
-
-        if ($product) {
-            return redirect()->back()->withSuccess("Product $product->name was successfully added");
-        }
+        return redirect()->back()->withSuccess("Product $product->name was successfully added");
     }
 
     /**
@@ -88,21 +74,12 @@ class ProductController extends Controller
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductWithLocalizationRequest $request, Product $product, UpdateProductGroupAction $action)
     {
-        $product->name = $request->name;
-        $product->price = (float) $request->price;
-        $product->save();
-        $localizations = $request->get('localizations');
-        foreach ($localizations as $localization => $data) {
-            $updatedProductLocalization = ProductLocalization::where(['product_id' => $product->id], ['locale' => $localization])->first();
-            $updatedProductLocalization->name = $request->name;
-            $updatedProductLocalization->description = $request->description;
-            $updatedProductLocalization->save();
-        }
+        $productWithLocalizationsData = $request->validated();
+        $action($product, $productWithLocalizationsData);
 
         return redirect()->route('products.index')->withSuccess("product $product->name was updates");
-
     }
 
     /**

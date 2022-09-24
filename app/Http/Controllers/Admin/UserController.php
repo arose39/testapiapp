@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Admin\User\CreateUserAction;
+use App\Actions\Admin\User\UpdateUserAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -37,18 +39,15 @@ class UserController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \ErrorException
      */
-    public function store(UserCreateRequest $request)
+    public function store(UserCreateRequest $request, CreateUserAction $action)
     {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $userData = $request->validated();
+        $user = $action($userData);
 
-        if ($user) {
-            return redirect()->back()->withSuccess("User $user->name was successfully added");
-        }
+        return redirect()->back()->withSuccess("User $user->name was successfully added");
+
     }
 
     /**
@@ -68,18 +67,15 @@ class UserController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\User $user
      * @return \Illuminate\Http\Response
+     * @throws \ErrorException
      */
-    public function update(UserUpdateRequest $request, User $user)
+    public function update(UserUpdateRequest $request, User $user, UpdateUserAction $action)
     {
-        $user->name = $request->name;
-        $user->email = $request->email;
-        if (!$request->password == '') {
-            $user->password = Hash::make($request->password);
-        }
+        $userData = $request->validated();
+        $action($user, $userData);
 
-        if ($user->save()) {
-            return redirect()->route('users.index')->withSuccess("User $user->name was updates");
-        }
+        return redirect()->route('users.index')->withSuccess("User $user->name was updates");
+
     }
 
     /**

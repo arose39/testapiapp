@@ -22,7 +22,7 @@
                 <label for="name"> Private Name</label>
                 <input name="name" type="string" class="form-control" id="name" placeholder="Enter private name">
                 <label for="price"> Price</label>
-                <input name="price" type="integer" class="form-control" id="price" placeholder="Enter price">
+                <input name="price" type="string" class="form-control" id="price" placeholder="Enter price">
             </div>
             <label for="ua_localization"> <h3>Ukrainian localization</h3> </label>
             <div class="form-group" id="ua_localization">
