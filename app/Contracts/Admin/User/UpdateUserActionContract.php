@@ -2,9 +2,9 @@
 
 namespace App\Contracts\Admin\User;
 
-use App\Models\Order;
+use App\Models\User;
 
 interface UpdateUserActionContract
 {
-    public function __invoke(Order $order, array $orderData): Order;
+    public function __invoke(User $user, array $orderData): User;
 }

@@ -2,53 +2,34 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Admin\Product\CreateProductGroupAction;
-use App\Actions\Admin\Product\UpdateProductGroupAction;
+use App\Contracts\Admin\Product\CreateProductGroupActionContract;
+use App\Contracts\Admin\Product\UpdateProductGroupActionContract;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductWithLocalizationRequest;
 use App\Models\Product;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function index()
+    public function index(): View
     {
         $products = Product::orderBy('name')->get();
 
         return view('admin/products/index', ['products' => $products]);
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function show(Product $product)
+    public function show(Product $product): View
     {
         return view('admin/products/show', ['product' => $product]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
+    public function create(): View
     {
         return view('admin/products/create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(ProductWithLocalizationRequest $request, CreateProductGroupAction $action)
+    public function store(ProductWithLocalizationRequest $request, CreateProductGroupActionContract $action): Response
     {
         $productWithLocalizationsData = $request->validated();
         $product = $action($productWithLocalizationsData);
@@ -56,25 +37,16 @@ class ProductController extends Controller
         return redirect()->back()->withSuccess("Product $product->name was successfully added");
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\User $user
-     * @return \Illuminate\View\View
-     */
-    public function edit(Product $product)
+    public function edit(Product $product): View
     {
         return view('admin/products/edit', ['product' => $product]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function update(ProductWithLocalizationRequest $request, Product $product, UpdateProductGroupAction $action)
+    public function update(
+        ProductWithLocalizationRequest $request,
+        Product $product,
+        UpdateProductGroupActionContract $action
+    ): Response
     {
         $productWithLocalizationsData = $request->validated();
         $action($product, $productWithLocalizationsData);
@@ -82,13 +54,7 @@ class ProductController extends Controller
         return redirect()->route('products.index')->withSuccess("product $product->name was updates");
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\User $user
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Product $product)
+    public function destroy(Product $product): Response
     {
         if ($product->delete()) {
             return redirect()->route('products.index')->withSuccess("Product was deleted");

@@ -2,34 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Admin\Order\CreateOrderActionContract;
-use App\Actions\Admin\Order\UpdateOrderActionContract;
+use App\Contracts\Admin\Order\CreateOrderActionContract;
+use App\Contracts\Admin\Order\UpdateOrderActionContract;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function index()
+    public function index(): View
     {
         $orders = Order::orderBy('created_at', 'DESC')->get();
 
         return view('admin/orders/index', ['orders' => $orders]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
+    public function create(): View
     {
         $users = User::orderBy('name')->get();
         $products = Product::orderBy('name')->get();
@@ -40,13 +32,7 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(OrderRequest $request, CreateOrderActionContract $action)
+    public function store(OrderRequest $request, CreateOrderActionContract $action): Response
     {
         $orderData = $request->validated();
         $order = $action($orderData);
@@ -54,13 +40,7 @@ class OrderController extends Controller
         return redirect()->back()->withSuccess("Order $order->id was successfully added");
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Order $Order
-     * @return \Illuminate\View\View
-     */
-    public function edit(Order $order)
+    public function edit(Order $order): View
     {
         $users = User::orderBy('name')->get();
         $products = Product::orderBy('name')->get();
@@ -72,14 +52,7 @@ class OrderController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param OrderRequest $request
-     * @param \App\Models\Order $Order
-     * @return \Illuminate\Http\Response
-     */
-    public function update(OrderRequest $request, Order $order, UpdateOrderActionContract $action)
+    public function update(OrderRequest $request, Order $order, UpdateOrderActionContract $action): Response
     {
         $orderData = $request->validated();
         $action($order, $orderData);
@@ -87,13 +60,7 @@ class OrderController extends Controller
         return redirect()->route('orders.index')->withSuccess("Order $order->id was updates");
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Order $Order
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Order $order)
+    public function destroy(Order $order): Response
     {
         if ($order->delete()) {
             return redirect()->route('orders.index')->withSuccess("Order was deleted");
