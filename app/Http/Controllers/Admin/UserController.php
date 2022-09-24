@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
-use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -25,7 +25,7 @@ class UserController extends Controller
         return view('admin/users/create');
     }
 
-    public function store(UserCreateRequest $request, CreateUserActionContract $action): Response
+    public function store(UserCreateRequest $request, CreateUserActionContract $action): RedirectResponse
     {
         $userData = $request->validated();
         $user = $action($userData);
@@ -38,7 +38,7 @@ class UserController extends Controller
         return view('admin/users/edit', ['user' => $user]);
     }
 
-    public function update(UserUpdateRequest $request, User $user, UpdateUserActionContract $action): Response
+    public function update(UserUpdateRequest $request, User $user, UpdateUserActionContract $action): RedirectResponse
     {
         $userData = $request->validated();
         $action($user, $userData);
@@ -46,7 +46,7 @@ class UserController extends Controller
         return redirect()->route('users.index')->withSuccess("User $user->name was updates");
     }
 
-    public function destroy(User $user): Response
+    public function destroy(User $user): RedirectResponse
     {
         if ($user->delete()) {
             return redirect()->route('users.index')->withSuccess("User was deleted");

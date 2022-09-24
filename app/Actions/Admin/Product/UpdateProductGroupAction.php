@@ -2,9 +2,10 @@
 
 namespace App\Actions\Admin\Product;
 
+use App\Contracts\Admin\Product\UpdateProductGroupActionContract;
 use App\Models\Product;
 
-class UpdateProductGroupAction
+class UpdateProductGroupAction implements UpdateProductGroupActionContract
 {
     public function __construct(
         private UpdateProductAction $updateProductAction,

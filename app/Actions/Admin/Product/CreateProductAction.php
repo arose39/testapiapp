@@ -2,9 +2,10 @@
 
 namespace App\Actions\Admin\Product;
 
+use App\Contracts\Admin\Product\CreateProductActionContract;
 use App\Models\Product;
 
-class CreateProductAction
+class CreateProductAction implements CreateProductActionContract
 {
     public function __invoke(array $productData): Product
     {

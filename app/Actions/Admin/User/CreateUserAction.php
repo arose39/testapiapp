@@ -2,10 +2,11 @@
 
 namespace App\Actions\Admin\User;
 
+use App\Contracts\Admin\User\CreateUserActionContract;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class CreateUserAction
+class CreateUserAction implements CreateUserActionContract
 {
     public function __invoke(array $userData): User
     {

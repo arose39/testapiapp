@@ -26,11 +26,6 @@ use Illuminate\Support\ServiceProvider;
 
 class ActionServiceProvider extends ServiceProvider
 {
-    /**
-     * All of the container bindings that should be registered.
-     *
-     * @var array
-     */
     public array $bindings = [
         CreateOrderActionContract::class => CreateOrderAction::class,
         UpdateOrderActionContract::class => UpdateOrderAction::class,
@@ -43,24 +38,4 @@ class ActionServiceProvider extends ServiceProvider
         CreateUserActionContract::class => CreateUserAction::class,
         UpdateUserActionContract::class => UpdateUserAction::class,
     ];
-
-    /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
-    }
-
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
 }

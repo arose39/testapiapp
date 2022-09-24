@@ -2,9 +2,10 @@
 
 namespace App\Actions\Admin\Product;
 
+use App\Contracts\Admin\Product\CreateProductGroupActionContract;
 use App\Models\Product;
 
-class CreateProductGroupAction
+class CreateProductGroupAction implements CreateProductGroupActionContract
 {
     public function __construct(
         private CreateProductAction $createProductAction,

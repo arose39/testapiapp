@@ -2,10 +2,11 @@
 
 namespace App\Actions\Admin\Product;
 
+use App\Contracts\Admin\Product\UpdateProductLocalizationsActionContract;
 use App\Models\Product;
 use App\Models\ProductLocalization;
 
-class UpdateProductLocalizationsAction
+class UpdateProductLocalizationsAction implements UpdateProductLocalizationsActionContract
 {
     public function __invoke(Product $product, array $localizations): array
     {

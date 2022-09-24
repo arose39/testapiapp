@@ -9,7 +9,7 @@ use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
-use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class OrderController extends Controller
@@ -32,7 +32,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function store(OrderRequest $request, CreateOrderActionContract $action): Response
+    public function store(OrderRequest $request, CreateOrderActionContract $action): RedirectResponse
     {
         $orderData = $request->validated();
         $order = $action($orderData);
@@ -52,7 +52,7 @@ class OrderController extends Controller
         ]);
     }
 
-    public function update(OrderRequest $request, Order $order, UpdateOrderActionContract $action): Response
+    public function update(OrderRequest $request, Order $order, UpdateOrderActionContract $action): RedirectResponse
     {
         $orderData = $request->validated();
         $action($order, $orderData);
@@ -60,7 +60,7 @@ class OrderController extends Controller
         return redirect()->route('orders.index')->withSuccess("Order $order->id was updates");
     }
 
-    public function destroy(Order $order): Response
+    public function destroy(Order $order): RedirectResponse
     {
         if ($order->delete()) {
             return redirect()->route('orders.index')->withSuccess("Order was deleted");

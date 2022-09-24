@@ -2,10 +2,11 @@
 
 namespace App\Actions\Admin\User;
 
+use App\Contracts\Admin\User\UpdateUserActionContract;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class UpdateUserAction
+class UpdateUserAction implements UpdateUserActionContract
 {
     public function __invoke(User $user, array $userData): User
     {

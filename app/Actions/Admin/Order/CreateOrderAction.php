@@ -2,9 +2,10 @@
 
 namespace App\Actions\Admin\Order;
 
+use App\Contracts\Admin\Order\CreateOrderActionContract;
 use App\Models\Order;
 
-class CreateOrderAction
+class CreateOrderAction implements CreateOrderActionContract
 {
     public function __invoke(array $orderData): Order
     {

@@ -7,7 +7,7 @@ use App\Contracts\Admin\Product\UpdateProductGroupActionContract;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductWithLocalizationRequest;
 use App\Models\Product;
-use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -29,7 +29,7 @@ class ProductController extends Controller
         return view('admin/products/create');
     }
 
-    public function store(ProductWithLocalizationRequest $request, CreateProductGroupActionContract $action): Response
+    public function store(ProductWithLocalizationRequest $request, CreateProductGroupActionContract $action): RedirectResponse
     {
         $productWithLocalizationsData = $request->validated();
         $product = $action($productWithLocalizationsData);
@@ -46,7 +46,7 @@ class ProductController extends Controller
         ProductWithLocalizationRequest $request,
         Product $product,
         UpdateProductGroupActionContract $action
-    ): Response
+    ): RedirectResponse
     {
         $productWithLocalizationsData = $request->validated();
         $action($product, $productWithLocalizationsData);
@@ -54,7 +54,7 @@ class ProductController extends Controller
         return redirect()->route('products.index')->withSuccess("product $product->name was updates");
     }
 
-    public function destroy(Product $product): Response
+    public function destroy(Product $product): RedirectResponse
     {
         if ($product->delete()) {
             return redirect()->route('products.index')->withSuccess("Product was deleted");

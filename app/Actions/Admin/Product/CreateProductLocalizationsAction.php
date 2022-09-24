@@ -2,10 +2,11 @@
 
 namespace App\Actions\Admin\Product;
 
+use App\Contracts\Admin\Product\CreateProductLocalizationsActionContract;
 use App\Models\Product;
 use App\Models\ProductLocalization;
 
-class CreateProductLocalizationsAction
+class CreateProductLocalizationsAction implements CreateProductLocalizationsActionContract
 {
     public function __invoke(Product $product, array $localizations): array
     {
