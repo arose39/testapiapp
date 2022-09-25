@@ -1,5 +1,5 @@
 @extends('layouts/admin_layout')
-@section('title', 'Все зарегистрированные пользователи')
+@section('title', __('admin.products.list_of_products'))
 @section('main_content')
     @if(session('success'))
         <div class="alert alert-danger">
@@ -7,13 +7,13 @@
         </div>
     @endif
     <a class="btn btn-block btn-info btn-lg" href="{{route('products.create')}}">
-        Add new product
+        {{__('admin.products.add_new_product')}}
     </a>
     <section class="content">
         <!-- Default box -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Products</h3>
+                <h3 class="card-title">{{__('admin.products.list_of_products')}}</h3>
 
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -32,7 +32,10 @@
                             id
                         </th>
                         <th style="width: 20%">
-                            name
+                            localized name
+                        </th>
+                        <th style="width: 20%">
+                            privat name
                         </th>
                         <th>
                             Price
@@ -51,6 +54,7 @@
                     @foreach($products as $product)
                         <tr>
                             <td>{{$product->id}}</td>
+                            <td>{{$product->localizations->where('locale', $locale)->first()->name}}</td>
                             <td>{{$product->name}}</td>
                             <td>{{$product->price}}</td>
                             <td>{{$product->created_at}}</td>

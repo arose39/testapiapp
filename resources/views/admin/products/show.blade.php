@@ -1,11 +1,11 @@
 @extends('layouts/admin_layout')
-@section('title', 'Product')
+@section('title', __('admin.products.product'))
 @section('main_content')
     <section class="content">
         <!-- Default box -->
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Products</h3>
+                <h3 class="card-title">{{__('admin.products.product')}}</h3>
 
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -24,7 +24,10 @@
                             id
                         </th>
                         <th style="width: 20%">
-                            name
+                            localized name
+                        </th>
+                        <th style="width: 20%">
+                            privat name
                         </th>
                         <th>
                             Price
@@ -46,9 +49,10 @@
 
                         <tr>
                             <td>{{$product->id}}</td>
+                            <td>{{$product->localizations->where('locale', $locale)->first()->name}}</td>
                             <td>{{$product->name}}</td>
                             <td>{{$product->price}}</td>
-                            <td>{{$product->localizations()->first()->description}}</td>
+                            <td>{{$product->localizations->where('locale', $locale)->first()->description}}</td>
                             <td>{{$product->created_at}}</td>
                             <td>{{$product->updated_at}}</td>
                             <td class="project-actions text-right">

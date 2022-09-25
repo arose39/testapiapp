@@ -38,11 +38,11 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="{{route( 'adminpannel')}}" class="brand-link">
-            <img src="/admin/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                 style="opacity: .8">
-            <span class="brand-text font-weight-light">Админ панель</span>
-        </a>
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <a href="{{route( 'adminpannel')}}" class="brand-link">
+                <span class="brand-text font-weight-light ">{{__('admin.sidebar.admin_panel')}}</span>
+            </a>
+        </div>
 
         <!-- Sidebar -->
         <div class="sidebar">
@@ -64,33 +64,33 @@
                          with font-awesome or any other icon font library -->
 
 
-                        <ul class="nav nav">
-                            <li class="nav-item">
-                                <a href="{{route('home')}}" class="nav-link">
-                                    <i class="far  nav-icon"></i>
-                                    <p>Главная страница</p>
-                                </a>
-                            </li>
+                    <ul class="nav nav">
+                        <li class="nav-item">
+                            <a href="{{route('home')}}" class="nav-link">
+                                <i class="far  nav-icon"></i>
+                                <p>{{__('admin.sidebar.main_page')}}</p>
+                            </a>
+                        </li>
 
-                            <li class="nav-item">
-                                <a href="{{route('users.index')}}" class="nav-link">
-                                    <i class="far  nav-icon"></i>
-                                    <p>Список зарегистрированных пользователей</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{route('products.index')}}" class="nav-link">
-                                    <i class="far  nav-icon"></i>
-                                    <p>Список продуктов</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{route('orders.index')}}" class="nav-link">
-                                    <i class="far  nav-icon"></i>
-                                    <p>Список заказов</p>
-                                </a>
-                            </li>
-                        </ul>
+                        <li class="nav-item">
+                            <a href="{{route('users.index')}}" class="nav-link">
+                                <i class="far  nav-icon"></i>
+                                <p>{{__('admin.sidebar.list_of_registered_users')}}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('products.index')}}" class="nav-link">
+                                <i class="far  nav-icon"></i>
+                                <p>{{__('admin.sidebar.list_of_products')}}</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('orders.index')}}" class="nav-link">
+                                <i class="far  nav-icon"></i>
+                                <p>{{__('admin.sidebar.list_of_orders')}}</p>
+                            </a>
+                        </li>
+                    </ul>
             </nav>
             <!-- /.sidebar-menu -->
         </div>

@@ -1,5 +1,5 @@
 @extends('layouts/admin_layout')
-@section('title', 'All orders')
+@section('title', __('admin.orders.list_of_orders'))
 @section('main_content')
     @if(session('success'))
         <div class="alert alert-danger">
@@ -7,7 +7,7 @@
         </div>
     @endif
     <a class="btn btn-block btn-info btn-lg" href="{{route('orders.create')}}">
-        Add new order
+        {{__('admin.orders.add_new_order')}}
     </a>
     <section class="content">
         <!-- Default box -->

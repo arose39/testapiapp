@@ -1,5 +1,5 @@
 @extends('layouts/admin_layout')
-@section('title', 'Редактирование данных пользователя')
+@section('title', __('admin.users.edit_user_page'))
 @section('main_content')
     @if(session('success'))
         <div class="alert alert-danger">
@@ -20,24 +20,24 @@
         @method('put')
         <div class="card-body">
             <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
+                <label for="exampleInputEmail1">{{__('admin.users.name')}}</label>
                 <input name="name" type="string" value="{{$user->name}}" class="form-control"
-                       id="exampleInputEmail1" placeholder="Enter name">
+                       id="exampleInputEmail1" placeholder="{{__('admin.users.enter_name')}}">
             </div>
             <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
+                <label for="exampleInputEmail1">{{__('admin.users.email')}}</label>
                 <input name="email" type="email" value="{{$user->email}}" class="form-control"
-                       id="exampleInputEmail1" placeholder="Enter email">
+                       id="exampleInputEmail1" placeholder="{{__('admin.users.enter_email')}}">
             </div>
             <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
+                <label for="exampleInputPassword1">{{__('admin.users.password')}}</label>
                 <input name="password" type="string" value="" class="form-control"
-                       id="exampleInputPassword1" placeholder="Оставьте поле пустым, если не хотите менять пароль">
+                       id="exampleInputPassword1" placeholder="{{__('admin.users.leave_password_empty')}}">
             </div>
         </div>
         <!-- /.card-body -->
         <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">{{__('admin.users.submit')}}</button>
         </div>
     </form>
 @endsection

@@ -14,14 +14,18 @@ class ProductController extends Controller
 {
     public function index(): View
     {
-        $products = Product::orderBy('name')->get();
-
-        return view('admin/products/index', ['products' => $products]);
+        return view('admin/products/index', [
+            'products' => Product::orderBy('name')->get(),
+            'locale' => app()->getLocale(),
+        ]);
     }
 
     public function show(Product $product): View
     {
-        return view('admin/products/show', ['product' => $product]);
+        return view('admin/products/show', [
+            'product' => $product,
+            'locale' => app()->getLocale(),
+        ]);
     }
 
     public function create(): View

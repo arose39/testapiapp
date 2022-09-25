@@ -1,5 +1,5 @@
 @extends('layouts/admin_layout')
-@section('title', 'Все зарегистрированные пользователи')
+@section('title', __('admin.users.list_of_registered_users'))
 @section('main_content')
     @if(session('success'))
         <div class="alert alert-danger">
@@ -7,7 +7,7 @@
         </div>
     @endif
     <a class="btn btn-block btn-info btn-lg" href="{{route('users.create')}}">
-        Добавить нового пользователя
+        {{__('admin.users.add_new_user')}}
     </a>
     <section class="content">
         <!-- Default box -->

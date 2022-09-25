@@ -1,5 +1,5 @@
 @extends('layouts/admin_layout')
-@section('title', 'Creating new order')
+@section('title', __('admin.orders.edit_order_page'))
 @section('main_content')
     @if(session('success'))
         <div class="alert alert-danger">
@@ -45,7 +45,7 @@
         <!-- /.card-body -->
 
         <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">{{__('admin.orders.submit')}}</button>
         </div>
     </form>
 @endsection
