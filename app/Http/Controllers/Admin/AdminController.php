@@ -11,7 +11,7 @@ use Illuminate\View\View;
 
 class AdminController extends Controller
 {
-    public function showPannel(): View
+    public function showPanel(): View
     {
         return view('admin/admin', [
             'numberUsersRegistrations' => User::all()->count(),

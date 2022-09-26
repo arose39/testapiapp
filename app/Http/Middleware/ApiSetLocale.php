@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 
-class SetLocale
+class ApiSetLocale
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next)
     {
-        $locale = $request->segment(1);
+        $locale = $request->segment(3);
         if(!($locale === 'ua' || $locale === 'en')){
             $locale = 'ua';
         }

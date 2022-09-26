@@ -20,8 +20,8 @@ Route::prefix('{locale}')
 
         Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
-        Route::prefix('adminpannel')->middleware(['admin'])->group(function () {
-            Route::get('/', [AdminController::class, 'showPannel'])->middleware(['admin'])->name('adminpannel');
+        Route::prefix('adminpanel')->middleware(['admin'])->group(function () {
+            Route::get('/', [AdminController::class, 'showPanel'])->middleware(['admin'])->name('adminpannel');
             Route::resource('users', UserController::class)->except(['show'])->middleware(['admin']);
             Route::resource('products', ProductController::class)->middleware(['admin']);
             Route::resource('orders', OrderController::class)->middleware(['admin']);
