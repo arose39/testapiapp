@@ -1,29 +1,37 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\UserController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+Route::prefix('{locale}')
+    ->where(['locale' => '[a-zA-Z]{2}'])
+    ->middleware('setlocale')
+    ->group(function () {
+
+        Route::get('/', function () {
+            return view('welcome');
+        })->name('home');
+
+        Auth::routes();
+
+        Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
+        Route::prefix('adminpanel')->middleware(['admin'])->group(function () {
+            Route::get('/', [AdminController::class, 'showPanel'])->middleware(['admin'])->name('adminpannel');
+            Route::resource('users', UserController::class)->except(['show'])->middleware(['admin']);
+            Route::resource('products', ProductController::class)->middleware(['admin']);
+            Route::resource('orders', OrderController::class)->middleware(['admin']);
+        });
+    });
 
 Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+    return redirect(app()->getLocale());
+});
 
-Auth::routes();
-
-Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-
-Route::prefix('adminpannel')->middleware(['admin'])->group(function () {
-    Route::get('/', [AdminController::class, 'showPannel'])->middleware(['admin'])->name('adminpannel');
-    Route::resource('users', UserController::class)->except(['show'])->middleware(['admin']);
+Route::get('/dashboard', function () {
+    return redirect()->route('dashboard', ['locale' => app()->getLocale()]);
 });
