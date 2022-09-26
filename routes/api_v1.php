@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\ProductController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,13 +20,42 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::prefix('{locale}')
-    ->where(['locale' => '[a-zA-Z]{2}'])
-    ->middleware('apisetlocale')
-    ->group(function () {
-        Route::apiResource('products',ProductController::class)
-            ->only('index' , 'show')
-            ->name('index','api_products.index')
-            ->name('show','api_products.show');
-        Route::get('products/{productId}/makeorder', [ProductController::class, 'makeOrder' ])->name('makeOrder');
+//Route::prefix('{locale}')
+//    ->where(['locale' => '[a-zA-Z]{2}'])
+//    ->middleware('apisetlocale')
+//    ->group(function () {
+//        Route::apiResource('products',ProductController::class)
+//            ->only('index' , 'show')
+//            ->name('index','api_products.index')
+//            ->name('show','api_products.show');
+//        Route::get('products/{productId}/makeorder', [ProductController::class, 'makeOrder' ])->name('makeOrder');
+//    });
+
+//Route::group(['middleware' => ['auth']], function () {
+//
+//});
+Route::group(['middleware' => 'auth:sanctum'], function () {
+
+//    Auth::routes();
+//
+//    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
+    Route::prefix('{locale}')
+        ->where(['locale' => '[a-zA-Z]{2}'])
+        ->middleware('apisetlocale')
+        ->group(function () {
+
+
+            Route::apiResource('products', ProductController::class)
+                ->only('index', 'show')
+                ->name('index', 'api_products.index')
+                ->name('show', 'api_products.show');
+
+            Route::get('products/{productId}/makeorder', [ProductController::class, 'makeOrder'])->name('makeOrder');
+        });
+
+    Route::get('/dashboard', function () {
+        return redirect()->route('dashboard', ['locale' => app()->getLocale()]);
     });
+});
+
