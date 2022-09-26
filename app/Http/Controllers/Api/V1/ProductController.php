@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Http\Controllers\Api\V1;
 
@@ -20,9 +20,9 @@ class ProductController extends Controller
         return new AllProductCollection(Product::orderBy('name')->paginate(10));
     }
 
-    public function show($locale, Product $product): OneProductResource
+    public function show(Product $product): OneProductResource
     {
-        return new OneProductResource($product) ;
+        return new OneProductResource($product);
     }
 
     public function makeOrder(int $productId): JsonResponse
